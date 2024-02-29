@@ -1,4 +1,12 @@
 <?php
+// syntax session_start diperlukan untuk menggunakan variable super global $_SESSION
+session_start();
+
+if ( !isset($_SESSION["login"])){
+    header("Location: login.php");
+    exit;
+};
+
 require "function.php";
 $mahasiswa = query("SELECT * FROM mahasiswa");
 
@@ -55,6 +63,8 @@ if (isset($_POST["search"])) {
     <div class="container">
         <a class="btn btn-success" href="tambah.php">Tambah Data</a>
     </div>
+
+    <a href="logout.php">Logout</a>
 
 </body>
 </html>

@@ -1,4 +1,12 @@
 <?php
+// syntax session_start diperlukan untuk menggunakan variable super global $_SESSION
+session_start();
+
+if ( !isset($_SESSION["login"])){
+    header("Location: login.php");
+    exit;
+};
+
 include("function.php");
 
 $id = $_GET["id"];

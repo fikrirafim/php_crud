@@ -1,4 +1,11 @@
 <?php
+// syntax session_start diperlukan untuk menggunakan variable super global $_SESSION
+session_start();
+
+if(isset($_SESSION["login"])){
+    header("Location: index.php");
+}
+
 include("function.php");
 
 if (isset($_POST["login"])) {
@@ -12,6 +19,10 @@ if (isset($_POST["login"])) {
         $row = mysqli_fetch_assoc($result);
         // function password_verify digunakan untuk memverifikasi password dari database yang sudah di acak menggunakan function password_hash
         if (password_verify($password, $row["password"])){
+            // set session
+            // var super global session digunakan untuk mencegah user bisa sembarangan masuk ke sebuah halaman tanpa login terlebih dahulu
+            $_SESSION["login"]=true;
+
             header("Location: index.php");
             exit;
         }
@@ -25,14 +36,21 @@ if (isset($_POST["login"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <title>Login</title>
 </head>
 <body>
-    <form action="" method="post">
-        <input type="text" name="username" placeholder="Username"> <br>
-        <input type="password" name="password" placeholder="Password"><br>
-        <button type="submit" name="login">Login</button><br>
-        <a href="signup.php">Registras disini</a>
+    <form action="" method="post" class="p-5 position-absolute top-50 start-50 translate-middle bg-light rounded-2">
+        <h1 class="mb-4 h3">Login here!</h1>
+        <input type="text" name="username" placeholder="Username" class="form-control"> <br>
+        <input type="password" name="password" placeholder="Password" class="form-control"><br>
+        <div class="container-fluid text-center">
+            <button type="submit" name="login" class="btn btn-primary mb-1">Login</button><br>
+            <p class="m-1 text-secondary">or</p>
+            <a href="signup.php" class="btn btn-success mt-1">Registrasi disini</a>
+        </div>
     </form>
     <?php if(isset($error)) : ?>
         <p>username atau password salah</p>
