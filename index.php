@@ -30,9 +30,9 @@ if (isset($_POST["search"])) {
 <body>
     <h1 class="container">Data Mahasiswa</h1>
 
-    <form action="" method="post">
-        <input type="text" name="key" autofocus placeholder="Apa yang mau kamu cari?" autocomplete="off">
-        <button type="submit" name="search">Cari</button>
+    <form action="" method="post" class="container input-group mb-3">
+        <input type="text" name="key" autofocus placeholder="Apa yang mau kamu cari?" autocomplete="off" class="form-control">
+        <button type="submit" name="search" class="btn btn-info">Cari</button>
     </form>
 
     <table class="container table table-secondary">
@@ -64,7 +64,9 @@ if (isset($_POST["search"])) {
         <a class="btn btn-success" href="tambah.php">Tambah Data</a>
     </div>
 
-    <a href="logout.php">Logout</a>
+    <div class="container mt-5">
+        <a href="logout.php" class="btn btn-danger">Logout</a>
+    </div>
 
 </body>
 </html>
