@@ -1,12 +1,27 @@
 <?php
 // syntax session_start diperlukan untuk menggunakan variable super global $_SESSION
 session_start();
+include("function.php");
+
+// cek cookie terlebih dahulu sebelum login
+if(isset($_COOKIE["id"]) && isset($_COOKIE["key"])){
+    $id=$_COOKIE["id"];
+    $key=$_COOKIE["key"];
+    
+    // ambil username baedasar id
+    $result=mysqli_query($conn,"SELECT username FROM user WHERE id = $id");
+    $row=mysqli_fetch_assoc($result);
+
+    // cek cookie dan username
+    if($key === hash('sha256', $row["username"])){
+        $_SESSION['login'] = true;
+    }
+}
 
 if(isset($_SESSION["login"])){
     header("Location: index.php");
 }
 
-include("function.php");
 
 if (isset($_POST["login"])) {
     $username = $_POST["username"];
@@ -22,6 +37,12 @@ if (isset($_POST["login"])) {
             // set session
             // var super global session digunakan untuk mencegah user bisa sembarangan masuk ke sebuah halaman tanpa login terlebih dahulu
             $_SESSION["login"]=true;
+
+            // set cookie
+            if(isset($_POST["remember"])){
+                setcookie("id",$row['id'], time()+60);
+                setcookie("key",hash('sha256',$row['username']), time()+60);
+            }
 
             header("Location: index.php");
             exit;
@@ -46,6 +67,9 @@ if (isset($_POST["login"])) {
         <h1 class="mb-4 h3">Login here!</h1>
         <input type="text" name="username" placeholder="Username" class="form-control"> <br>
         <input type="password" name="password" placeholder="Password" class="form-control"><br>
+        <label for="remember">Remember me</label>
+        <input type="checkbox" name="remember" id="remember">
+
         <div class="container-fluid text-center">
             <button type="submit" name="login" class="btn btn-primary mb-1">Login</button><br>
             <p class="m-1 text-secondary">or</p>
